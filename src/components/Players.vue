@@ -1,7 +1,7 @@
 <template>
     <div class="rotation-wrapper">
       PLAYERS
-      <button @click="addPlayer">Add Player</button>
+      <button @click="addPlayer" class="addPlayerButton">Add Player</button>
       <ul>
         <li 
             v-for="(player, index) in players" 
@@ -43,7 +43,7 @@
     margin: 5px 0;
     background-color: #f0f0f0;
     border-radius: 5px;
-    width: 50%
+    width: 50%;
   }
   li.player:hover{
     background-color: lightcoral;
