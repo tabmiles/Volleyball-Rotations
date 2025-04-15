@@ -1,42 +1,41 @@
 <template>
   <div class="rotation-wrapper">
-    ROTATION WRAPPER
-    {{ players.length ? players : 'No players' }}
-    <Court v-for="(player, index) in playerRotations" :key="index" :players="player" class="court"/>
+    <Court
+      v-for="(player, index) in playerRotations"
+      :key="index"
+      :players="player"
+      class="court"
+    />
   </div>
 </template>
 
 <script>
-import Court from './Court.vue';
+import { store } from "@/store";
+import Court from "./Court.vue";
 
 export default {
-  name: 'Rotations',
+  name: "Rotations",
   components: {
-    Court
-  },
-  props: {
-    players: {
-      type: Array,
-      required: true,
-      defualt: []
-    }
+    Court,
   },
   data() {
     return {
-      playerRotations: []
-    }
+      playerRotations: [],
+      players: [],
+    };
   },
   methods: {
     buildPlayerRotations() {
       this.playerRotations = [];
+      this.players = store.getPlayers();
       for (let i = 0; i < this.players.length; i++) {
         const rotation = this.players.slice(i).concat(this.players.slice(0, i));
         this.playerRotations.push(rotation);
       }
       console.log(this.playerRotations, this.players);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

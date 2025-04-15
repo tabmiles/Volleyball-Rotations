@@ -1,36 +1,36 @@
 <template>
-  <Players @updatePlayers="handlePlayers"/>
-  <Rotations :players="players" ref="rotations"/>
+  <Players @updatePlayers="handlePlayers" />
+  <Rotations ref="rotations" />
 </template>
 
 <script>
-import Players from './components/Players.vue';
-import Rotations from './components/Rotations.vue'
+import Players from "./components/Players.vue";
+import Rotations from "./components/Rotations.vue";
+import { store } from "./store";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     Rotations,
-    Players
+    Players,
   },
-  data() {
-    return {
-      players: []
-    }
-  },
+  // data() {
+  //   return {
+  //     players: [],
+  //   };
+  // },
   methods: {
     handlePlayers(players) {
-      this.players = players;
-      if(this.players.length === 6) {
+      store.setPlayers(players);
+      if (store.players.length === 6) {
         this.$refs.rotations.buildPlayerRotations();
-      } else if (this.players.length < 6) {
+      } else if (store.players.length < 6) {
         this.$refs.rotations.playerRotations = [];
       }
-    }
+    },
   },
-  mounted() {
-  }
-}
+  mounted() {},
+};
 </script>
 
 <style>
