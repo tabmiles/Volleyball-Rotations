@@ -1,7 +1,7 @@
 <template>
   <div v-if="showModal" class="modal-wrapper">
     <div class="modal-content">
-      <div v-if="type === 'addPlayer'">
+      <div v-if="type === 'addPlayer' || type === 'editPlayer'">
         <input
           type="text"
           ref="playerNameInput"
@@ -10,19 +10,24 @@
           placeholder="Enter player name"
           class="player-input"
         />
+        <label for="playerRole">Role:</label>
+        <select
+          id="playerRole"
+          ref="playerRoleInput"
+          v-model="playerRole"
+          class="player-role-input"
+        >
+          <option value="">Select role (optional)</option>
+          <option value="setter">Setter</option>
+          <option value="outside-hitter">Outside (left) Hitter</option>
+          <option value="opposite-hitter">Opposite (right) Hitter</option>
+          <option value="middle-blocker">Middle Blocker</option>
+          <option value="libero">Libero</option>
+          <option value="defensive-specialist">Defensive Specialist</option>
+        </select>
       </div>
       <div v-else-if="type === 'removePlayer'">
         Do you want to remove {{ data.name }}?
-      </div>
-      <div v-else-if="type === 'editPlayer'">
-        <input
-          type="text"
-          ref="playerNameInput"
-          @keypress="handleKeyPress"
-          v-model="playerName"
-          placeholder="Enter player name"
-          class="player-input"
-        />
       </div>
       <button
         class="cancelButton"
@@ -45,24 +50,29 @@
 <script>
 export default {
   name: "Rotations",
+
   data() {
     return {
       showModal: false,
       playerName: "",
+      playerRole: "",
       type: "",
       data: {},
     };
   },
+  
   methods: {
     handleConfirmation() {
       if (!this.validatePlayerName()) return;
-      this.$emit("modalConfirmation", this.playerName);
+      this.$emit("modalConfirmation", {name: this.playerName, role: this.playerRole});
       this.playerName = "";
+      this.playerRole = "";
       this.showModal = false;
     },
     handleCancellation() {
       this.$emit("modalCancellaction");
       this.playerName = "";
+      this.playerRole = "";
       this.showModal = false;
     },
     handleKeyPress(event) {

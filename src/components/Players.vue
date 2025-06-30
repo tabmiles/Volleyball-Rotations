@@ -1,6 +1,5 @@
 <template>
   <div class="rotation-wrapper">
-    PLAYERS
     <button
       @click="triggerModal('addPlayer')"
       ref="addPlayerButton"
@@ -10,11 +9,14 @@
     </button>
     <ul>
       <li v-for="(player, index) in players" :key="index" class="player">
-        {{ player.name }}
+        <div class="name">{{ player.name }}</div>
+        <span :class="player.role === 'player' ? '' : player.role" class="role">
+          {{ player.role === 'player' ? '' : player.role }}
+        </span>
         <div class="playerButtons">
           <button
             @click="
-              triggerModal('editPlayer', { name: player.name, index: index })
+              triggerModal('editPlayer', { name: player.name, index: index, role: player.role })
             "
             class="playerButton"
             id="editPlayerButton"
@@ -42,9 +44,11 @@ import Modal from "./Modal.vue";
 
 export default {
   name: "Rotations",
+
   components: {
     Modal,
   },
+
   data() {
     return {
       players: [],
@@ -53,7 +57,9 @@ export default {
       selectedPlayer: null,
     };
   },
+
   emits: ["updatePlayers"],
+
   methods: {
     triggerModal(modalType, data = null) {
       if (modalType === "addPlayer" && this.players.length === 6) return;
@@ -67,10 +73,10 @@ export default {
         data: this.modalData,
       });
     },
-    handleModalConfirmation() {
+    handleModalConfirmation(playerData) {
       switch (this.modalType) {
         case "addPlayer":
-          this.addPlayer(this.$refs.PlayerModal.playerName);
+          this.addPlayer(playerData.name, playerData.role);
           this.$refs.addPlayerButton.focus();
           break;
         case "removePlayer":
@@ -79,21 +85,23 @@ export default {
         case "editPlayer":
           this.editPlayer(
             this.selectedPlayer.index,
-            this.$refs.PlayerModal.playerName
+            playerData.name,
+            playerData.role
           );
           break;
       }
     },
-    addPlayer(player) {
-      this.players.push({ name: player });
+    addPlayer(player, role) {
+      this.players.push({ name: player, role: role || "player" });
       this.$emit("updatePlayers", this.players);
     },
     removePlayer(index) {
       this.players.splice(index, 1);
       this.$emit("updatePlayers", this.players);
     },
-    editPlayer(index, player) {
+    editPlayer(index, player, role) {
       this.players[index].name = player;
+      this.players[index].role = role || "player";
       this.$emit("updatePlayers", this.players);
     },
   },
@@ -130,5 +138,29 @@ li.player:hover {
 .playerButton#removePlayerButton:hover,
 .playerButton#removePlayerButton:focus {
   background-color: lightcoral;
+}
+span.role {
+  font-size: smaller;
+  border-radius: 5px;
+  padding: 2px 3px;
+  color: white;
+}
+.role.setter {
+  background-color: #f78d8d;
+}
+.role.opposite-hitter {
+  background-color: #ffc4c4;
+}
+.role.outside-hitter {
+  background-color: #c4ccff;
+}
+.role.middle-blocker {
+  background-color: #ebc4ff;
+}
+.role.defensive-specialist {
+  background-color: #c4ffc8;
+}
+.role.libero {
+  background-color: #98cc9c;
 }
 </style>

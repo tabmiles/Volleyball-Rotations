@@ -1,8 +1,9 @@
 <template>
   <div class="court">
     <ul class="rotation">
-      <li v-for="(player, index) in players" :key="index" class="player">
-        {{ player.name }}
+      <li v-for="(player, index) in players" :key="index" :class="player.role==='player' ? '': player.role" class="player">
+        <div class="name">{{ player.name }}</div>
+        <span :class="player.role==='player' ? '': player.role" class="role">{{ player.role==='player' ? '': player.role }}</span>
       </li>
     </ul>
   </div>
@@ -11,6 +12,7 @@
 <script>
 export default {
   name: "Rotations",
+
   props: {
     players: {
       type: Array,
@@ -34,6 +36,7 @@ div.court {
     "e f a";
   display: grid;
   padding: 0;
+  grid-gap: 30px 10px;
 }
 li.player:nth-child(1) {
   grid-area: a;
@@ -53,8 +56,40 @@ li.player:nth-child(5) {
 li.player:nth-child(6) {
   grid-area: f;
 }
-.player {
+li.player {
   text-align: center;
   padding: 5px;
+  min-height: 40px;
+  align-content: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+div.name {
+  font-size: larger;
+  margin-bottom: 5px;
+}
+span.role {
+  font-size: smaller;
+  border-radius: 5px;
+  padding: 2px 3px;
+  color: white;
+}
+.role.setter {
+  background-color: #f78d8d;
+}
+.role.opposite-hitter {
+  background-color: #ffc4c4;
+}
+.role.outside-hitter {
+  background-color: #c4ccff;
+}
+.role.middle-blocker {
+  background-color: #ebc4ff;
+}
+.role.defensive-specialist {
+  background-color: #c4ffc8;
+}
+.role.libero {
+  background-color: #98cc9c;
 }
 </style>

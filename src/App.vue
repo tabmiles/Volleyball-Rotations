@@ -1,5 +1,8 @@
 <template>
   <Players @updatePlayers="handlePlayers" />
+  <button
+    class="buildRotationsButton"
+    @click="$refs.rotations.buildPlayerRotations()">Build Rotations</button>
   <Rotations ref="rotations" />
 </template>
 
@@ -14,21 +17,13 @@ export default {
     Rotations,
     Players,
   },
-  // data() {
-  //   return {
-  //     players: [],
-  //   };
-  // },
+
   methods: {
     handlePlayers(players) {
       store.setPlayers(players);
-      if (store.players.length === 6) {
-        this.$refs.rotations.buildPlayerRotations();
-      } else if (store.players.length < 6) {
-        this.$refs.rotations.playerRotations = [];
-      }
     },
   },
+  
   mounted() {},
 };
 </script>

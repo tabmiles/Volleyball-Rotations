@@ -1,11 +1,12 @@
 <template>
   <div class="rotation-wrapper">
-    <Court
-      v-for="(player, index) in playerRotations"
-      :key="index"
-      :players="player"
-      class="court"
-    />
+    <div v-for="(players, index) in playerRotations" :key="index">
+      Rotation {{ index + 1 }}
+      <Court
+        :players="players"
+        class="court"
+      />
+    </div>
   </div>
 </template>
 
@@ -15,15 +16,18 @@ import Court from "./Court.vue";
 
 export default {
   name: "Rotations",
+
   components: {
     Court,
   },
+
   data() {
     return {
       playerRotations: [],
       players: [],
     };
   },
+  
   methods: {
     buildPlayerRotations() {
       this.playerRotations = [];
