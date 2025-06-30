@@ -1,6 +1,6 @@
 {
   "name": "Volleyball-Rotations",
-  "version": "0.1.05",
+  "version": "0.1.06",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
