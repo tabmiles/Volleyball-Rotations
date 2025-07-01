@@ -1,5 +1,5 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
-  publicPath: '/' + process.env.CI_PROJECT_NAME + '/'
+  publicPath: '/Volleyball-Rotations/'
 })
