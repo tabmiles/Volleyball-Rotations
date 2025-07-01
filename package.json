@@ -3,12 +3,10 @@
   "version": "0.1.06",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "serve": "npm run serve",
+    "build": "npm run build"
   },
   "dependencies": {
-    "@vue/compiler-sfc": "^3.5.17",
     "core-js": "^3.8.3",
     "vue": "^3.2.26"
   },
