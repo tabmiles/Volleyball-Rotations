@@ -4,9 +4,7 @@
  * @modified by https://github.com/dazecoop/github-page-deploy
  */
 
-// UPDATE THE FOLLOWING TO YOUR PROJECT NAME WITHIN GITHUB
-// eg https://dazecoop.github.io/PROJECT_NAME/ <- This bit
-const projectName = 'PROJECT_NAME';
+const projectName = 'Volleyball-Rotations';
 
 const execa = require('execa');
 const fs = require('fs');
