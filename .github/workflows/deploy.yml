@@ -14,11 +14,12 @@ jobs:
             - name: Create Node Environment
               uses: actions/setup-node@v1
               with: 
-                node-version: 12.x
+                node-version: 16.x
             - name: Install Packages and Build Application
               run: |
-                npm i
-                npm run build
+                npm install -g @vue/cli yarn
+                yarn install
+                yarn build
             - name: Deploy
               uses: s0/git-publish-subdir-action@develop
               env:
