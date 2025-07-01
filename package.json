@@ -9,6 +9,7 @@
     "predeploy": "npm run build"
   },
   "dependencies": {
+    "@vue/compiler-sfc": "^3.5.17",
     "core-js": "^3.8.3",
     "vue": "^3.2.26"
   },
