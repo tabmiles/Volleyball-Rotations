@@ -1,5 +1,6 @@
 <template>
-  <div class="rotation-wrapper">
+  <div class="player-wrapper">
+    <div class="default">Starting Lineup</div>
     <button
       @click="triggerModal('addPlayer')"
       ref="addPlayerButton"
@@ -40,10 +41,11 @@
 </template>
 
 <script>
+import { store } from "@/store";
 import Modal from "./Modal.vue";
 
 export default {
-  name: "Rotations",
+  name: "Players",
 
   components: {
     Modal,
@@ -57,8 +59,6 @@ export default {
       selectedPlayer: null,
     };
   },
-
-  emits: ["updatePlayers"],
 
   methods: {
     triggerModal(modalType, data = null) {
@@ -93,16 +93,16 @@ export default {
     },
     addPlayer(player, role) {
       this.players.push({ name: player, role: role || "player" });
-      this.$emit("updatePlayers", this.players);
+      store.addPlayer(player, role);
     },
     removePlayer(index) {
       this.players.splice(index, 1);
-      this.$emit("updatePlayers", this.players);
+      store.removePlayer(index);
     },
     editPlayer(index, player, role) {
       this.players[index].name = player;
       this.players[index].role = role || "player";
-      this.$emit("updatePlayers", this.players);
+      store.editPlayer(index, player, role);
     },
   },
 };

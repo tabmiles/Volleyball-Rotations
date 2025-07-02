@@ -1,5 +1,11 @@
 <template>
   <div class="rotation-wrapper">
+    <button
+      class="buildRotationsButton"
+      @click="buildPlayerRotations()">
+      <!-- TODO: update button title if rotations have already been built -->
+      <span :class="[numPlayers>1 ? 'enabled' : 'disabled']">Build Rotations</span>
+    </button>
     <div v-for="(players, index) in playerRotations" :key="index">
       Rotation {{ index + 1 }}
       <Court
@@ -13,6 +19,7 @@
 <script>
 import { store } from "@/store";
 import Court from "./Court.vue";
+import { EventBus } from "@/shared/eventBus";
 
 export default {
   name: "Rotations",
@@ -25,6 +32,7 @@ export default {
     return {
       playerRotations: [],
       players: [],
+      numPlayers: 0
     };
   },
   
@@ -39,6 +47,12 @@ export default {
       console.log(this.playerRotations, this.players);
     },
   },
+
+  mounted() {
+    EventBus.on('playerUpdate', (players) => {
+      this.numPlayers = players.length;
+    })
+  },
 };
 </script>
 
@@ -48,5 +62,13 @@ export default {
   margin: 10px;
   padding: 10px;
   width: 50%;
+}
+.disabled {
+  opacity: .5;
+  pointer-events: none;
+}
+
+.enabled {
+  opacity: 1;
 }
 </style>
