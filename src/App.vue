@@ -1,10 +1,10 @@
 <template>
-  <Players />
+  <StartingLineup />
   <Rotations ref="rotations" />
 </template>
 
 <script>
-import Players from "./components/Players.vue";
+import StartingLineup from "./components/StartingLineup.vue";
 import Rotations from "./components/Rotations.vue";
 
 export default {
@@ -12,7 +12,7 @@ export default {
 
   components: {
     Rotations,
-    Players,
+    StartingLineup,
   },
 
   methods: {
