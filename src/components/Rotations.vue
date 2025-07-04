@@ -11,6 +11,7 @@
       <Court
         :players="players"
         class="court"
+        :class="[numPlayers===2 ? 'two-player' : numPlayers===3 ? 'three-player' : numPlayers===4 ? 'four-player' : numPlayers===5 ? 'five-player' : numPlayers===6 ? 'six-player' : '']"
       />
     </div>
   </div>
@@ -38,10 +39,11 @@ export default {
   
   methods: {
     buildPlayerRotations() {
+      // TODO: handle 3 person rotation
       this.playerRotations = [];
       this.players = store.getPlayers();
       for (let i = 0; i < this.players.length; i++) {
-        const rotation = this.players.slice(i).concat(this.players.slice(0, i));
+        const rotation = i===0 ? this.players : this.players.slice(this.players.length-i).concat(this.players.slice(0, -i));
         this.playerRotations.push(rotation);
       }
       console.log(this.playerRotations, this.players);

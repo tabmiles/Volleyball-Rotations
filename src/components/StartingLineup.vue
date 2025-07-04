@@ -30,23 +30,28 @@
       @click="addPlayer(playerName, playerRole)"
       ref="addPlayerButton"
       class="addPlayerButton"
+      :disabled="!playerName.trim() || players.length >= 6"
     >
       Add Player
     </button>
+
     <ul ref="playerList" class="player-list">
       <li
         v-for="(player, index) in players"
         :key="index"
         class="player"
       >
+        <span class="num">{{ index+1 }}</span>
         <span class="drag-icon" aria-hidden="true">
           <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M359.79-192Q330-192 309-213.21t-21-51Q288-294 309.21-315t51-21Q390-336 411-314.79t21 51Q432-234 410.79-213t-51 21Zm240 0Q570-192 549-213.21t-21-51Q528-294 549.21-315t51-21Q630-336 651-314.79t21 51Q672-234 650.79-213t-51 21Zm-240-216Q330-408 309-429.21t-21-51Q288-510 309.21-531t51-21Q390-552 411-530.79t21 51Q432-450 410.79-429t-51 21Zm240 0Q570-408 549-429.21t-21-51Q528-510 549.21-531t51-21Q630-552 651-530.79t21 51Q672-450 650.79-429t-51 21Zm-240-216Q330-624 309-645.21t-21-51Q288-726 309.21-747t51-21Q390-768 411-746.79t21 51Q432-666 410.79-645t-51 21Zm240 0Q570-624 549-645.21t-21-51Q528-726 549.21-747t51-21Q630-768 651-746.79t21 51Q672-666 650.79-645t-51 21Z"/></svg>
         </span>
-        <span
+        <label for="playerName" class="sr-only">Name:</label>
+        <input
           class="name"
+          id="playerName"
           @blur="editPlayer(index, player.name, player.role)"
-          contenteditable="true"
-        >{{ player.name }}</span>
+          v-model="player.name"
+        />
         <label for="playerRole" class="sr-only">Role:</label>
         <select
           v-model="player.role"
@@ -113,13 +118,20 @@ export default {
 </script>
 
 <style scoped>
+*:disabled {
+  cursor: not-allowed;
+}
+span.num {
+  position: absolute;
+  left: 20px;
+}
 span.drag-icon {
   cursor:move;
   svg {
     fill: black;
   }
 }
-span.name {
+input.name {
   cursor: pointer;
   min-width: 50%;
   &:hover {
