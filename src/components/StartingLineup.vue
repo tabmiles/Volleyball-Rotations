@@ -35,49 +35,52 @@
       Add Player
     </button>
 
-    <ul ref="playerList" class="player-list">
+    <ol ref="playerList" class="player-list">
       <li
-        v-for="(player, index) in players"
-        :key="index"
+        v-for="player in players"
+        :key="player.id"
         class="player"
       >
-        <span class="num">{{ index+1 }}</span>
-        <span class="drag-icon" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M359.79-192Q330-192 309-213.21t-21-51Q288-294 309.21-315t51-21Q390-336 411-314.79t21 51Q432-234 410.79-213t-51 21Zm240 0Q570-192 549-213.21t-21-51Q528-294 549.21-315t51-21Q630-336 651-314.79t21 51Q672-234 650.79-213t-51 21Zm-240-216Q330-408 309-429.21t-21-51Q288-510 309.21-531t51-21Q390-552 411-530.79t21 51Q432-450 410.79-429t-51 21Zm240 0Q570-408 549-429.21t-21-51Q528-510 549.21-531t51-21Q630-552 651-530.79t21 51Q672-450 650.79-429t-51 21Zm-240-216Q330-624 309-645.21t-21-51Q288-726 309.21-747t51-21Q390-768 411-746.79t21 51Q432-666 410.79-645t-51 21Zm240 0Q570-624 549-645.21t-21-51Q528-726 549.21-747t51-21Q630-768 651-746.79t21 51Q672-666 650.79-645t-51 21Z"/></svg>
-        </span>
-        <label for="playerName" class="sr-only">Name:</label>
-        <input
-          class="name"
-          id="playerName"
-          @blur="editPlayer(index, player.name, player.role)"
-          v-model="player.name"
-        />
-        <label for="playerRole" class="sr-only">Role:</label>
-        <select
-          v-model="player.role"
-          class="role"
-          :class="player.role"
-          @change="editPlayer(index, player.name, player.role)"
-          id="playerRole"
-        >
-          <option value="setter" class="setter">Setter</option>
-          <option value="outside-hitter" class="outside-hitter">Outside Hitter</option>
-          <option value="opposite-hitter" class="opposite-hitter">Opposite Hitter</option>
-          <option value="middle-blocker" class="middle-blocker">Middle Blocker</option>
-          <option value="libero" class="libero">Libero</option>
-          <option value="defensive-specialist" class="defensive-specialist">Defensive Specialist</option>
-        </select>
-        <button
-          @click="removePlayer(index)"
-          class="playerButton"
-        >Remove</button>
+        <div class="player-wrapper">
+          <span class="drag-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M359.79-192Q330-192 309-213.21t-21-51Q288-294 309.21-315t51-21Q390-336 411-314.79t21 51Q432-234 410.79-213t-51 21Zm240 0Q570-192 549-213.21t-21-51Q528-294 549.21-315t51-21Q630-336 651-314.79t21 51Q672-234 650.79-213t-51 21Zm-240-216Q330-408 309-429.21t-21-51Q288-510 309.21-531t51-21Q390-552 411-530.79t21 51Q432-450 410.79-429t-51 21Zm240 0Q570-408 549-429.21t-21-51Q528-510 549.21-531t51-21Q630-552 651-530.79t21 51Q672-450 650.79-429t-51 21Zm-240-216Q330-624 309-645.21t-21-51Q288-726 309.21-747t51-21Q390-768 411-746.79t21 51Q432-666 410.79-645t-51 21Zm240 0Q570-624 549-645.21t-21-51Q528-726 549.21-747t51-21Q630-768 651-746.79t21 51Q672-666 650.79-645t-51 21Z"/></svg>
+          </span>
+          <label for="playerName" class="sr-only">Name:</label>
+          <input
+            class="name"
+            id="playerName"
+            @blur="editPlayer(player.id, player.name, player.role)"
+            v-model="player.name"
+          />
+          <label for="playerRole" class="sr-only">Role:</label>
+          <select
+            v-model="player.role"
+            class="role"
+            :class="player.role"
+            @change="editPlayer(player.id, player.name, player.role)"
+            id="playerRole"
+          >
+            <option value="setter" class="setter">Setter</option>
+            <option value="outside-hitter" class="outside-hitter">Outside Hitter</option>
+            <option value="opposite-hitter" class="opposite-hitter">Opposite Hitter</option>
+            <option value="middle-blocker" class="middle-blocker">Middle Blocker</option>
+            <option value="libero" class="libero">Libero</option>
+            <option value="defensive-specialist" class="defensive-specialist">Defensive Specialist</option>
+          </select>
+          <button
+            @click="removePlayer(player.id)"
+            class="playerButton"
+          >Remove</button>
+        </div>
       </li>
-    </ul>
+    </ol>
   </div>
 </template>
 
 <script>
+import { EventBus } from "@/shared/eventBus";
 import { store } from "@/store";
+import Sortable from "sortablejs";
 
 export default {
   name: "StartingLineup",
@@ -90,12 +93,12 @@ export default {
       selectedPlayer: null,
       playerName: "",
       playerRole: "",
+      sortable: null
     };
   },
 
   methods: {
     addPlayer(player, role) {
-      this.players.push({ name: player, role: role || "player" });
       store.addPlayer(player, role);
       this.$nextTick(() => {
         this.playerName = "";
@@ -103,17 +106,31 @@ export default {
       });
     },
 
-    removePlayer(index) {
-      this.players.splice(index, 1);
+    removePlayer(id) {
+      const index = this.players.findIndex(p => p.id === id);
       store.removePlayer(index);
     },
 
-    editPlayer(index, player, role) {
-      this.players[index].name = player;
-      this.players[index].role = role || "player";
+    editPlayer(id, player, role) {
+      const index = this.players.findIndex(p => p.id === id);
       store.editPlayer(index, player, role);
-    },
+    }
   },
+
+  mounted() {
+    this.sortable = new Sortable(this.$refs.playerList, {
+      handle: '.drag-icon',
+      animation: 400,
+      onEnd: (event) => {
+        store.movePlayer(event.oldIndex, event.newIndex);
+      }
+    });
+
+    EventBus.on('playerUpdate', (players) => {
+      this.players = [];
+      this.$nextTick(() => this.players = players);
+    })
+  }
 };
 </script>
 
@@ -141,8 +158,7 @@ input.name {
 select, button {
   cursor: pointer;
 }
-li.player {
-  list-style: none;
+li.player div.player-wrapper {
   padding: 10px;
   margin: 5px 0;
   background-color: #f0f0f0;

@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul class="rotation">
-      <li v-for="(player, index) in players" :key="index" :class="player.role==='player' ? '': player.role" class="player">
+      <li v-for="player in players" :key="player.id" :class="player.role==='player' ? '': player.role" class="player">
         <div class="name">{{ player.name }}</div>
         <span :class="player.role==='player' ? '': player.role" class="role">{{ player.role==='player' ? '': player.role }}</span>
       </li>

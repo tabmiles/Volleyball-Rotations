@@ -1,11 +1,5 @@
 <template>
   <div class="rotation-wrapper">
-    <button
-      class="buildRotationsButton"
-      @click="buildPlayerRotations()">
-      <!-- TODO: update button title if rotations have already been built -->
-      <span :class="[numPlayers>1 ? 'enabled' : 'disabled']">Build Rotations</span>
-    </button>
     <div v-for="(players, index) in playerRotations" :key="index">
       Rotation {{ index + 1 }}
       <Court
@@ -42,18 +36,24 @@ export default {
       // TODO: handle 3 person rotation
       this.playerRotations = [];
       this.players = store.getPlayers();
+      this.numPlayers = this.players.length;
+      let rotations = [];
       for (let i = 0; i < this.players.length; i++) {
         const rotation = i===0 ? this.players : this.players.slice(this.players.length-i).concat(this.players.slice(0, -i));
-        this.playerRotations.push(rotation);
+        rotations.push(rotation);
       }
-      console.log(this.playerRotations, this.players);
+      this.$nextTick(() => this.playerRotations = rotations );
     },
   },
 
   mounted() {
     EventBus.on('playerUpdate', (players) => {
-      this.numPlayers = players.length;
+      this.$nextTick(() => { if (players.length>=3) this.buildPlayerRotations() });
     })
+  },
+
+  unmounted() {
+    EventBus.off('playerUpdate');
   },
 };
 </script>
