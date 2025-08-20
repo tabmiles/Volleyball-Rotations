@@ -1,5 +1,6 @@
 <template>
-  <div class="rotation-wrapper">
+  <div v-if="playerRotations.length>2" class="rotation-wrapper">
+    <div class="rotation-title">Showing Rotations for {{ playerRotations.length }} players</div>
     <div v-for="(players, index) in playerRotations" :key="index">
       Rotation {{ index + 1 }}
       <Court
@@ -47,8 +48,8 @@ export default {
   },
 
   mounted() {
-    EventBus.on('playerUpdate', (players) => {
-      this.$nextTick(() => { if (players.length>=3) this.buildPlayerRotations() });
+    EventBus.on('playerUpdate', () => {
+      this.$nextTick(() => { this.buildPlayerRotations() });
     })
   },
 

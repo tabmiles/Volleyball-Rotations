@@ -21,7 +21,7 @@
           <option value="setter">Setter</option>
           <option value="outside-hitter">Outside (left) Hitter</option>
           <option value="opposite-hitter">Opposite (right) Hitter</option>
-          <option value="middle-blocker">Middle Blocker</option>
+          <option value="middle-hitter">Middle Hitter</option>
           <option value="libero">Libero</option>
           <option value="defensive-specialist">Defensive Specialist</option>
         </select>

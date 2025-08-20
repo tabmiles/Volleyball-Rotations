@@ -22,7 +22,7 @@
       <option value="setter">Setter</option>
       <option value="outside-hitter">Outside (left) Hitter</option>
       <option value="opposite-hitter">Opposite (right) Hitter</option>
-      <option value="middle-blocker">Middle Blocker</option>
+      <option value="middle-hitter">Middle Hitter</option>
       <option value="libero">Libero</option>
       <option value="defensive-specialist">Defensive Specialist</option>
     </select>
@@ -63,7 +63,7 @@
             <option value="setter" class="setter">Setter</option>
             <option value="outside-hitter" class="outside-hitter">Outside Hitter</option>
             <option value="opposite-hitter" class="opposite-hitter">Opposite Hitter</option>
-            <option value="middle-blocker" class="middle-blocker">Middle Blocker</option>
+            <option value="middle-hitter" class="middle-hitter">Middle Hitter</option>
             <option value="libero" class="libero">Libero</option>
             <option value="defensive-specialist" class="defensive-specialist">Defensive Specialist</option>
           </select>
@@ -114,6 +114,13 @@ export default {
     editPlayer(id, player, role) {
       const index = this.players.findIndex(p => p.id === id);
       store.editPlayer(index, player, role);
+    },
+
+    handleKeyPress(event) {
+      if (event.key === "Enter" && this.playerName.length > 0) {
+        this.addPlayer(this.playerName, this.playerRole);
+        this.$refs.playerNameInput.focus();
+      }
     }
   },
 
@@ -199,7 +206,7 @@ select.role {
 .role.outside-hitter, select option[value="outside-hitter"] {
   background-color: #c4ccff;
 }
-.role.middle-blocker, select option[value="middle-blocker"] {
+.role.middle-hitter, select option[value="middle-hitter"] {
   background-color: #ebc4ff;
 }
 .role.defensive-specialist, select option[value="defensive-specialist"] {

@@ -136,7 +136,7 @@ span.role {
 .role.outside-hitter {
   background-color: #c4ccff;
 }
-.role.middle-blocker {
+.role.middle-hitter {
   background-color: #ebc4ff;
 }
 .role.defensive-specialist {
