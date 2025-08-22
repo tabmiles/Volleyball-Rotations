@@ -34,14 +34,20 @@ export default {
   
   methods: {
     buildPlayerRotations() {
-      // TODO: handle 3 person rotation
       this.playerRotations = [];
       this.players = store.getPlayers();
       this.numPlayers = this.players.length;
       let rotations = [];
-      for (let i = 0; i < this.players.length; i++) {
-        const rotation = i===0 ? this.players : this.players.slice(this.players.length-i).concat(this.players.slice(0, -i));
-        rotations.push(rotation);
+      if (this.numPlayers === 3) {
+        for (let j = 0; j < this.players.length; j++) {
+          const rotation = this.players.slice(j).concat(this.players.slice(0, j));
+          rotations.push(rotation);
+        }
+      } else {
+        for (let i = 0; i < this.players.length; i++) {
+          const rotation = i===0 ? this.players : this.players.slice(this.players.length-i).concat(this.players.slice(0, -i));
+          rotations.push(rotation);
+        }
       }
       this.$nextTick(() => this.playerRotations = rotations );
     },
